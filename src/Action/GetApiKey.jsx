@@ -6,13 +6,10 @@ import ListTodos from "../Components/ListTodos";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// import { httpClient } from "../lib/client";
-
-export default function GetApiKey() {
+export default function GetApiKey({ newTodo, onDataSend }) {
   const [apiKey, setApiKey] = useState("");
   const [prompt, setPrompt] = useState(false);
   const [toastContent, setToast] = useState("idle");
-
   const getApiKey = async (query) => {
     try {
       setToast("Vui lòng chờ");
@@ -23,7 +20,6 @@ export default function GetApiKey() {
         throw new Error();
       }
       const emailKey = await res.json();
-      console.log(emailKey);
       const { apiKey } = emailKey.data;
       setApiKey(apiKey);
       console.log("apiKey", apiKey);
@@ -49,6 +45,11 @@ export default function GetApiKey() {
     }
   }, [prompt, toastContent]);
 
+  useEffect(() => {
+    if (apiKey) {
+      onDataSend(apiKey);
+    }
+  }, [apiKey, onDataSend]);
   return (
     <>
       {!apiKey ? (
@@ -56,7 +57,7 @@ export default function GetApiKey() {
           Không có công việc nào
         </div>
       ) : (
-        <ListTodos></ListTodos>
+        <ListTodos apiKey={apiKey} newTodo={newTodo}></ListTodos>
       )}
       <ToastContainer />
     </>
