@@ -27,7 +27,6 @@ export const httpClient = {
       const data = response.json();
       return { response, data };
     } catch (e) {
-      console.log(e);
       //Gọi API để cấp lại accessToken mới (Truyền lên refreshToken)
       //Kiểm tra Response của api RefreshToken có hợp lệ không
       // - Không hợp lệ --> Failed
