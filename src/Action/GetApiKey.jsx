@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import ListTodos from "../Components/ListTodos";
-import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function GetApiKey({ newTodo, onDataSend }) {
+export default function GetApiKey({ newTodo, onDataSend, onGetToast }) {
   const [apiKey, setApiKey] = useState("");
   const [prompt, setPrompt] = useState(false);
   const [toastContent, setToast] = useState("idle");
@@ -40,10 +40,18 @@ export default function GetApiKey({ newTodo, onDataSend }) {
       getApiKey(userInputEmail);
     }
     setPrompt(true);
+  }, [prompt]);
+
+  useEffect(() => {
     if (toastContent != "idle") {
       toast(toastContent);
     }
-  }, [prompt, toastContent]);
+  }, [toastContent, toast]);
+  // useEffect(() => {
+  //   if (typeof onGetToast === "function") {
+  //     onGetToast(toastContent);
+  //   }
+  // }, [toastContent, onGetToast]);
 
   useEffect(() => {
     if (apiKey) {
@@ -59,7 +67,6 @@ export default function GetApiKey({ newTodo, onDataSend }) {
       ) : (
         <ListTodos apiKey={apiKey} newTodo={newTodo}></ListTodos>
       )}
-      <ToastContainer />
     </>
   );
 }
